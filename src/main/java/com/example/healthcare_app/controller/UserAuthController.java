@@ -1,11 +1,14 @@
 package com.example.healthcare_app.controller;
 
 import com.example.healthcare_app.dto.LoginRequest;
+import com.example.healthcare_app.dto.LoginResponse;
+import com.example.healthcare_app.dto.RefreshTokenRequest;
 import com.example.healthcare_app.dto.RegisterRequest;
 import com.example.healthcare_app.entity.User;
 import com.example.healthcare_app.repository.UserRepository;
-import com.example.healthcare_app.service.UserAuthService;
 
+import com.example.healthcare_app.security.JwtUtil;
+import com.example.healthcare_app.service.UserAuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -35,7 +38,7 @@ public class UserAuthController {
     // LOGIN USER
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest request) {
-        String response = userAuthService.login(request);
+        String response = String.valueOf(userAuthService.login(request));
         return ResponseEntity.ok(response);
     }
 
@@ -73,6 +76,16 @@ public class UserAuthController {
 
         userRepository.deleteById(id);
         return ResponseEntity.ok("User deleted successfully");
+    }
+
+    @PostMapping("/refresh")
+    public LoginResponse refreshToken(@RequestBody RefreshTokenRequest request){
+
+        String email = JwtUtil.extractEmail(request.getRefreshToken());
+
+        String newAccessToken = JwtUtil.generateAccessToken(email);
+
+        return new LoginResponse(newAccessToken, request.getRefreshToken());
     }
 
 }

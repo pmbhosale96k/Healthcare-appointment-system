@@ -1,11 +1,12 @@
 package com.example.healthcare_app.service;
 
 import com.example.healthcare_app.dto.LoginRequest;
+import com.example.healthcare_app.dto.LoginResponse;
 import com.example.healthcare_app.dto.RegisterRequest;
 import com.example.healthcare_app.entity.User;
 import com.example.healthcare_app.repository.UserRepository;
+import com.example.healthcare_app.security.JwtUtil;
 
-import com.example.healthcare_app.security.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -23,6 +24,9 @@ public class UserAuthService {
 
     @Autowired
     private EmailService emailService;
+
+    @Autowired
+    private JwtUtil jwtUtil;
 
     public String register(RegisterRequest request){
 
@@ -47,20 +51,19 @@ public class UserAuthService {
         return "User Registered Successfully";
     }
 
-    public String login(LoginRequest request){
+    public LoginResponse login(LoginRequest request){
 
-        Optional<User> userOptional = userRepository.findByEmail(request.getEmail());
+        User user = userRepository.findByEmail(request.getEmail())
+                .orElseThrow(() -> new RuntimeException("User not found"));
 
-        if(userOptional.isEmpty()){
-            return "User not found";
+        if(!passwordEncoder.matches(request.getPassword(), user.getPassword())){
+            throw new RuntimeException("Invalid password");
         }
 
-        User user = userOptional.get();
+        String accessToken = jwtUtil.generateAccessToken(user.getEmail());
+        String refreshToken = jwtUtil.generateRefreshToken(user.getEmail());
 
-        if(!passwordEncoder.matches(request.getPassword(),user.getPassword())){
-            return "Invalid password";
-        }
-
-        return "Login successful";
+        return new LoginResponse(accessToken, refreshToken);
     }
+
 }
