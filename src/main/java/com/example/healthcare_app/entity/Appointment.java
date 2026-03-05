@@ -1,42 +1,36 @@
 package com.example.healthcare_app.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import java.time.LocalDateTime;
+import com.example.healthcare_app.enums.AppointmentStatus;
+import jakarta.persistence.*;
+import lombok.*;
+
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 @Entity
+@Table(name = "appointments")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Appointment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private LocalDateTime appointmentTime;
-    private String status;
+    private String name;
 
-    public Long getId() {
-        return id;
-    }
+    private Integer age;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    private String email;
 
-    public LocalDateTime getAppointmentTime() {
-        return appointmentTime;
-    }
+    private LocalDate appointmentDate;
 
-    public void setAppointmentTime(LocalDateTime appointmentTime) {
-        this.appointmentTime = appointmentTime;
-    }
+    private LocalTime appointmentTime;
 
-    public String getStatus() {
-        return status;
-    }
+    @Enumerated(EnumType.STRING)
+    private AppointmentStatus status;
 
-    public void setStatus(String status) {
-        this.status = status;
-    }
 }

@@ -1,4 +1,4 @@
-package com.example.healthcare_app.security;
+package com.example.healthcare_app.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
