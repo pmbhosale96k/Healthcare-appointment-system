@@ -6,7 +6,7 @@ export const getAllDoctors = async () => {
 };
 
 export const addDoctor = async (doctorData) => {
-  const response = await axiosInstance.post('/admin/doctors', doctorData);
+  const response = await axiosInstance.post('/admin/add-doctor', doctorData);
   return response.data;
 };
 
@@ -21,6 +21,6 @@ export const deleteDoctor = async (id) => {
 };
 
 export const getAllAppointments = async () => {
-  const response = await axiosInstance.get('/admin/appointments');
+  const response = await axiosInstance.get('/api/appointments/all');
   return response.data;
 };

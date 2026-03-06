@@ -25,13 +25,16 @@ const SetAvailability = () => {
       await setAvailability(formData);
       setSuccess('Availability set successfully!');
       setFormData({ date: '', startTime: '', endTime: '' });
-    } catch (err) {
+    } catch {
       setError('Failed to set availability');
     }
   };
 
   return (
-    <div className="set-availability">
+    <div className="set-availability page-shell">
+      <div className="section-head">
+        <p className="eyebrow">Schedule Control</p>
+      </div>
       <h2>Set Availability</h2>
       <form onSubmit={handleSubmit}>
         <div>

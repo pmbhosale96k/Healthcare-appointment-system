@@ -10,8 +10,9 @@ const ManageDoctors = () => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
+    password: '',
     specialization: '',
-    hospitalId: '',
+    experience: '',
   });
 
   useEffect(() => {
@@ -22,7 +23,7 @@ const ManageDoctors = () => {
     try {
       const data = await getAllDoctors();
       setDoctors(data);
-    } catch (err) {
+    } catch {
       setError('Failed to load doctors');
     } finally {
       setLoading(false);
@@ -47,8 +48,8 @@ const ManageDoctors = () => {
       fetchDoctors();
       setShowForm(false);
       setEditingDoctor(null);
-      setFormData({ name: '', email: '', specialization: '', hospitalId: '' });
-    } catch (err) {
+      setFormData({ name: '', email: '', password: '', specialization: '', experience: '' });
+    } catch {
       setError('Failed to save doctor');
     }
   };
@@ -58,8 +59,9 @@ const ManageDoctors = () => {
     setFormData({
       name: doctor.name,
       email: doctor.email,
+      password: '',
       specialization: doctor.specialization,
-      hospitalId: doctor.hospital?.id || '',
+      experience: doctor.experience || '',
     });
     setShowForm(true);
   };
@@ -69,7 +71,7 @@ const ManageDoctors = () => {
       try {
         await deleteDoctor(id);
         fetchDoctors();
-      } catch (err) {
+      } catch {
         setError('Failed to delete doctor');
       }
     }
@@ -79,7 +81,10 @@ const ManageDoctors = () => {
   if (error) return <div>{error}</div>;
 
   return (
-    <div className="manage-doctors">
+    <div className="manage-doctors page-shell">
+      <div className="section-head">
+        <p className="eyebrow">Roster Management</p>
+      </div>
       <h2>Manage Doctors</h2>
       <button onClick={() => setShowForm(!showForm)}>
         {showForm ? 'Cancel' : 'Add Doctor'}
@@ -107,6 +112,16 @@ const ManageDoctors = () => {
             />
           </div>
           <div>
+            <label>Password:</label>
+            <input
+              type="password"
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
+              required={!editingDoctor}
+            />
+          </div>
+          <div>
             <label>Specialization:</label>
             <input
               type="text"
@@ -117,11 +132,12 @@ const ManageDoctors = () => {
             />
           </div>
           <div>
-            <label>Hospital ID:</label>
+            <label>Experience (years):</label>
             <input
-              type="text"
-              name="hospitalId"
-              value={formData.hospitalId}
+              type="number"
+              min="0"
+              name="experience"
+              value={formData.experience}
               onChange={handleChange}
               required
             />
@@ -135,6 +151,7 @@ const ManageDoctors = () => {
             <h3>{doctor.name}</h3>
             <p>Email: {doctor.email}</p>
             <p>Specialization: {doctor.specialization}</p>
+            <p>Experience: {doctor.experience ?? 0} years</p>
             <button onClick={() => handleEdit(doctor)}>Edit</button>
             <button onClick={() => handleDelete(doctor.id)}>Delete</button>
           </div>

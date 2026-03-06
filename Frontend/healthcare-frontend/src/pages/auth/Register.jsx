@@ -7,7 +7,6 @@ const Register = () => {
     name: '',
     email: '',
     password: '',
-    role: 'PATIENT',
   });
   const [error, setError] = useState('');
   const { register } = useAuth();
@@ -25,18 +24,19 @@ const Register = () => {
     setError('');
     const result = await register(formData);
     if (result.success) {
-      const role = result.user.role.toLowerCase();
-      navigate(`/${role}/dashboard`);
+      navigate('/login');
     } else {
       setError(result.error);
     }
   };
 
   return (
-    <div className="register-container">
-      <h2>Register</h2>
-      <form onSubmit={handleSubmit}>
-        <div>
+    <div className="auth-layout">
+      <div className="auth-card">
+        <p className="eyebrow">Create Account</p>
+        <h2>Register</h2>
+        <form onSubmit={handleSubmit} className="auth-form">
+          <div>
           <label>Name:</label>
           <input
             type="text"
@@ -45,8 +45,8 @@ const Register = () => {
             onChange={handleChange}
             required
           />
-        </div>
-        <div>
+          </div>
+          <div>
           <label>Email:</label>
           <input
             type="email"
@@ -55,8 +55,8 @@ const Register = () => {
             onChange={handleChange}
             required
           />
-        </div>
-        <div>
+          </div>
+          <div>
           <label>Password:</label>
           <input
             type="password"
@@ -65,20 +65,14 @@ const Register = () => {
             onChange={handleChange}
             required
           />
-        </div>
-        <div>
-          <label>Role:</label>
-          <select name="role" value={formData.role} onChange={handleChange}>
-            <option value="PATIENT">Patient</option>
-            <option value="DOCTOR">Doctor</option>
-          </select>
-        </div>
-        {error && <p className="error">{error}</p>}
-        <button type="submit">Register</button>
-      </form>
-      <p>
-        Already have an account? <Link to="/login">Login</Link>
-      </p>
+          </div>
+          {error && <p className="error">{error}</p>}
+          <button type="submit">Register</button>
+        </form>
+        <p className="auth-switch">
+          Already have an account? <Link to="/login">Login</Link>
+        </p>
+      </div>
     </div>
   );
 };

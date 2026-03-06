@@ -19,6 +19,9 @@ public class UserAppointmentRequest {
     private String email;
 
     @NotNull
+    private Long doctorId;
+
+    @NotNull
     private LocalDate appointmentDate;
 
     @NotNull

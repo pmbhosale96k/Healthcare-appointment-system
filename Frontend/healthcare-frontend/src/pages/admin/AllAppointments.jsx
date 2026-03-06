@@ -15,7 +15,7 @@ const AllAppointments = () => {
     try {
       const data = await getAllAppointments();
       setAppointments(data);
-    } catch (err) {
+    } catch {
       setError('Failed to load appointments');
     } finally {
       setLoading(false);
@@ -26,7 +26,10 @@ const AllAppointments = () => {
   if (error) return <div>{error}</div>;
 
   return (
-    <div className="all-appointments">
+    <div className="all-appointments page-shell">
+      <div className="section-head">
+        <p className="eyebrow">Operations Feed</p>
+      </div>
       <h2>All Appointments</h2>
       <div className="appointments-list">
         {appointments.length === 0 ? (

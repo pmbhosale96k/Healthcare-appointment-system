@@ -26,6 +26,8 @@ public class Appointment {
 
     private String email;
 
+    private Long doctorId;
+
     private LocalDate appointmentDate;
 
     private LocalTime appointmentTime;

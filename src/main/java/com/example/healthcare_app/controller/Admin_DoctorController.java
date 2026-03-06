@@ -6,7 +6,10 @@ import com.example.healthcare_app.repository.DoctorRepository;
 import com.example.healthcare_app.security.JwtUtil;
 import com.example.healthcare_app.service.AdminAppointmentService;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -35,8 +38,27 @@ public class Admin_DoctorController {
 
     // Doctor Appointments
     @GetMapping("/appointments")
-    public List<Appointment> getAppointments() {
-        return appointmentService.getAllAppointments();
+    public List<Appointment> getAppointments(
+            @RequestHeader(value = "Authorization", required = false) String authHeader,
+            Authentication authentication
+    ) {
+        String email = null;
+
+        if (authentication != null && authentication.getName() != null && !authentication.getName().isBlank()) {
+            email = authentication.getName();
+        } else if (authHeader != null && authHeader.startsWith("Bearer ")) {
+            String token = authHeader.substring(7);
+            email = jwtUtil.extractEmail(token);
+        }
+
+        if (email == null || email.isBlank()) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Doctor authentication required");
+        }
+
+        Doctor doctor = doctorRepository.findByEmail(email)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Doctor not found"));
+
+        return appointmentService.getAppointmentsByDoctorId(doctor.getId());
     }
 
     // Doctor Profile

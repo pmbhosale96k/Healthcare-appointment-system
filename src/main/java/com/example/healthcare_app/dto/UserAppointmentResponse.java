@@ -11,6 +11,8 @@ import java.time.LocalTime;
 @Builder
 public class UserAppointmentResponse {
 
+    private Long id;
+
     private String name;
 
     private LocalDate appointmentDate;

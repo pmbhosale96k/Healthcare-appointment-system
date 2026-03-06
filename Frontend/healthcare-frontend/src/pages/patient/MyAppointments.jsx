@@ -1,32 +1,36 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { getPatientAppointments, cancelAppointment } from '../../api/appointmentApi';
 import AppointmentCard from '../../components/AppointmentCard';
+import { useAuth } from '../../context/AuthContext';
 
 const MyAppointments = () => {
   const [appointments, setAppointments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const { user } = useAuth();
 
-  useEffect(() => {
-    fetchAppointments();
-  }, []);
-
-  const fetchAppointments = async () => {
+  const fetchAppointments = useCallback(async () => {
     try {
-      const data = await getPatientAppointments();
+      const data = await getPatientAppointments(user?.email);
       setAppointments(data);
-    } catch (err) {
+    } catch {
       setError('Failed to load appointments');
     } finally {
       setLoading(false);
     }
-  };
+  }, [user?.email]);
+
+  useEffect(() => {
+    if (user?.email) {
+      fetchAppointments();
+    }
+  }, [user?.email, fetchAppointments]);
 
   const handleCancel = async (id) => {
     try {
       await cancelAppointment(id);
       fetchAppointments(); // Refresh the list
-    } catch (err) {
+    } catch {
       setError('Failed to cancel appointment');
     }
   };
@@ -35,7 +39,10 @@ const MyAppointments = () => {
   if (error) return <div>{error}</div>;
 
   return (
-    <div className="my-appointments">
+    <div className="my-appointments page-shell">
+      <div className="section-head">
+        <p className="eyebrow">Patient Timeline</p>
+      </div>
       <h2>My Appointments</h2>
       <div className="appointments-list">
         {appointments.length === 0 ? (
