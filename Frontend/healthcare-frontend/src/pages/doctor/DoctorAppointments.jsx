@@ -15,7 +15,7 @@ const DoctorAppointments = () => {
     try {
       const data = await getDoctorAppointments();
       setAppointments(data);
-    } catch (err) {
+    } catch {
       setError('Failed to load appointments');
     } finally {
       setLoading(false);
@@ -26,7 +26,7 @@ const DoctorAppointments = () => {
     try {
       await updateAppointmentStatus(id, status);
       fetchAppointments(); // Refresh the list
-    } catch (err) {
+    } catch {
       setError('Failed to update appointment status');
     }
   };
@@ -35,7 +35,10 @@ const DoctorAppointments = () => {
   if (error) return <div>{error}</div>;
 
   return (
-    <div className="doctor-appointments">
+    <div className="doctor-appointments page-shell">
+      <div className="section-head">
+        <p className="eyebrow">Clinical Queue</p>
+      </div>
       <h2>My Appointments</h2>
       <div className="appointments-list">
         {appointments.length === 0 ? (

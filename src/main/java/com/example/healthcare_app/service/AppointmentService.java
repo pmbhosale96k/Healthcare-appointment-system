@@ -28,7 +28,8 @@ public class AppointmentService {
         }
 
         boolean exists = appointmentRepository
-                .existsByAppointmentDateAndAppointmentTime(
+                .existsByDoctorIdAndAppointmentDateAndAppointmentTime(
+                        request.getDoctorId(),
                         request.getAppointmentDate(),
                         request.getAppointmentTime()
                 );
@@ -43,6 +44,7 @@ public class AppointmentService {
                 .name(request.getName())
                 .age(request.getAge())
                 .email(request.getEmail())
+                .doctorId(request.getDoctorId())
                 .appointmentDate(request.getAppointmentDate())
                 .appointmentTime(request.getAppointmentTime())
                 .status(AppointmentStatus.PENDING)
@@ -57,6 +59,7 @@ public class AppointmentService {
         return appointmentRepository.findByEmail(email)
                 .stream()
                 .map(a -> UserAppointmentResponse.builder()
+                        .id(a.getId())
                         .name(a.getName())
                         .appointmentDate(a.getAppointmentDate())
                         .appointmentTime(a.getAppointmentTime())

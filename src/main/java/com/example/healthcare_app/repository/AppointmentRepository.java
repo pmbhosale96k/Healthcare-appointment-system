@@ -12,6 +12,9 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
     // Get appointments for a specific patient
     List<Appointment> findByEmail(String email);
 
+    // Get appointments for a specific doctor
+    List<Appointment> findByDoctorId(Long doctorId);
+
     // Prevent duplicate bookings for same slot
-    boolean existsByAppointmentDateAndAppointmentTime(LocalDate appointmentDate, LocalTime appointmentTime);
+    boolean existsByDoctorIdAndAppointmentDateAndAppointmentTime(Long doctorId, LocalDate appointmentDate, LocalTime appointmentTime);
 }

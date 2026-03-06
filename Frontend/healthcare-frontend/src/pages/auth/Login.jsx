@@ -7,6 +7,7 @@ const Login = () => {
     email: '',
     password: '',
   });
+  const [role, setRole] = useState('PATIENT');
   const [error, setError] = useState('');
   const { login } = useAuth();
   const navigate = useNavigate();
@@ -21,20 +22,22 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
-    const result = await login(formData);
+    const result = await login(formData, role);
     if (result.success) {
-      const role = result.user.role.toLowerCase();
-      navigate(`/${role}/dashboard`);
+      const userRole = result.user.role.toLowerCase();
+      navigate(`/${userRole}/dashboard`);
     } else {
       setError(result.error);
     }
   };
 
   return (
-    <div className="login-container">
-      <h2>Login</h2>
-      <form onSubmit={handleSubmit}>
-        <div>
+    <div className="auth-layout">
+      <div className="auth-card">
+        <p className="eyebrow">Secure Access</p>
+        <h2>Login</h2>
+        <form onSubmit={handleSubmit} className="auth-form">
+          <div>
           <label>Email:</label>
           <input
             type="email"
@@ -43,8 +46,8 @@ const Login = () => {
             onChange={handleChange}
             required
           />
-        </div>
-        <div>
+          </div>
+          <div>
           <label>Password:</label>
           <input
             type="password"
@@ -53,13 +56,22 @@ const Login = () => {
             onChange={handleChange}
             required
           />
-        </div>
-        {error && <p className="error">{error}</p>}
-        <button type="submit">Login</button>
-      </form>
-      <p>
-        Don't have an account? <Link to="/register">Register</Link>
-      </p>
+          </div>
+          <div>
+          <label>Role:</label>
+          <select value={role} onChange={(e) => setRole(e.target.value)}>
+            <option value="PATIENT">Patient</option>
+            <option value="DOCTOR">Doctor</option>
+            <option value="ADMIN">Admin</option>
+          </select>
+          </div>
+          {error && <p className="error">{error}</p>}
+          <button type="submit">Login</button>
+        </form>
+        <p className="auth-switch">
+          Don't have an account? <Link to="/register">Register</Link>
+        </p>
+      </div>
     </div>
   );
 };

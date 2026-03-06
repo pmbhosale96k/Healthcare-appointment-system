@@ -1,14 +1,17 @@
 package com.example.healthcare_app.controller;
 import com.example.healthcare_app.dto.*;
 import com.example.healthcare_app.enums.AppointmentStatus;
+import com.example.healthcare_app.entity.Appointment;
 import com.example.healthcare_app.service.AppointmentService;
 
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import org.springframework.http.HttpStatus;
 
 @RestController
 @RequestMapping("/api/appointments")
@@ -26,9 +29,13 @@ public class AppointmentController {
             Authentication authentication
     ){
 
-        String email = authentication.getName();
+        if (authentication != null && authentication.getName() != null && !authentication.getName().isBlank()) {
+            request.setEmail(authentication.getName());
+        }
 
-        request.setEmail(email);
+        if (request.getEmail() == null || request.getEmail().isBlank()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email is required");
+        }
 
         appointmentService.bookAppointment(request);
 
@@ -40,11 +47,25 @@ public class AppointmentController {
      * Get appointments for logged-in user
      */
     @GetMapping("/my")
-    public List<UserAppointmentResponse> getMyAppointments(Authentication authentication){
+    public List<UserAppointmentResponse> getMyAppointments(
+            @RequestParam(required = false) String email,
+            Authentication authentication
+    ){
 
-        String email = authentication.getName();
+        String resolvedEmail = (authentication != null && authentication.getName() != null && !authentication.getName().isBlank())
+                ? authentication.getName()
+                : email;
 
-        return appointmentService.getAppointmentsByEmail(email);
+        if (resolvedEmail == null || resolvedEmail.isBlank()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email is required");
+        }
+
+        return appointmentService.getAppointmentsByEmail(resolvedEmail);
+    }
+
+    @GetMapping("/all")
+    public List<Appointment> getAllAppointments() {
+        return appointmentService.getAllAppointments();
     }
 
 
@@ -60,6 +81,12 @@ public class AppointmentController {
         appointmentService.updateStatus(id, status);
 
         return "Appointment status updated";
+    }
+
+    @PutMapping("/{id}/cancel")
+    public String cancelAppointment(@PathVariable Long id) {
+        appointmentService.updateStatus(id, AppointmentStatus.REJECTED);
+        return "Appointment cancelled";
     }
 
 }

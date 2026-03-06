@@ -1,26 +1,24 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { bookAppointment } from '../../api/appointmentApi';
+import { useAuth } from '../../context/AuthContext';
 
 const BookAppointment = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const doctor = location.state?.doctor;
+  const { user } = useAuth();
 
   const [formData, setFormData] = useState({
+    name: user?.name || '',
+    age: '',
+    email: user?.email || '',
     doctorId: doctor?.id || '',
     appointmentDate: '',
     appointmentTime: '',
-    reason: '',
   });
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
-
-  useEffect(() => {
-    if (doctor) {
-      setFormData((prev) => ({ ...prev, doctorId: doctor.id }));
-    }
-  }, [doctor]);
 
   const handleChange = (e) => {
     setFormData({
@@ -33,20 +31,58 @@ const BookAppointment = () => {
     e.preventDefault();
     setError('');
     setSuccess('');
+    if (!formData.doctorId) {
+      setError('Please select a doctor from Search Doctors before booking.');
+      return;
+    }
     try {
       await bookAppointment(formData);
       setSuccess('Appointment booked successfully!');
       setTimeout(() => navigate('/patient/my-appointments'), 2000);
-    } catch (err) {
+    } catch {
       setError('Failed to book appointment');
     }
   };
 
   return (
-    <div className="book-appointment">
+    <div className="book-appointment page-shell">
+      <div className="section-head">
+        <p className="eyebrow">Booking Desk</p>
+      </div>
       <h2>Book Appointment</h2>
       {doctor && <p>With Dr. {doctor.name}</p>}
       <form onSubmit={handleSubmit}>
+        <div>
+          <label>Name:</label>
+          <input
+            type="text"
+            name="name"
+            value={formData.name}
+            onChange={handleChange}
+            required
+          />
+        </div>
+        <div>
+          <label>Age:</label>
+          <input
+            type="number"
+            min="1"
+            name="age"
+            value={formData.age}
+            onChange={handleChange}
+            required
+          />
+        </div>
+        <div>
+          <label>Email:</label>
+          <input
+            type="email"
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
+            required
+          />
+        </div>
         <div>
           <label>Date:</label>
           <input
@@ -63,15 +99,6 @@ const BookAppointment = () => {
             type="time"
             name="appointmentTime"
             value={formData.appointmentTime}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div>
-          <label>Reason:</label>
-          <textarea
-            name="reason"
-            value={formData.reason}
             onChange={handleChange}
             required
           />

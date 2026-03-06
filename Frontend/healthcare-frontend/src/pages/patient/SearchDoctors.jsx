@@ -17,7 +17,7 @@ const SearchDoctors = () => {
     try {
       const data = await getDoctors();
       setDoctors(data);
-    } catch (err) {
+    } catch {
       setError('Failed to load doctors');
     } finally {
       setLoading(false);
@@ -32,7 +32,10 @@ const SearchDoctors = () => {
   if (error) return <div>{error}</div>;
 
   return (
-    <div className="search-doctors">
+    <div className="search-doctors page-shell">
+      <div className="section-head">
+        <p className="eyebrow">Doctor Directory</p>
+      </div>
       <h2>Search Doctors</h2>
       <div className="doctors-list">
         {doctors.map((doctor) => (

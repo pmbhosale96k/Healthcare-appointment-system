@@ -18,7 +18,10 @@ const Navbar = () => {
   return (
     <nav className="navbar">
       <div className="navbar-brand">
-        <Link to={`/${user.role.toLowerCase()}/dashboard`}>Healthcare App</Link>
+        <Link to={`/${user.role.toLowerCase()}/dashboard`}>
+          <span className="brand-mark">+</span>
+          <span>PulseCare</span>
+        </Link>
       </div>
       <div className="navbar-menu">
         {user.role === 'PATIENT' && (
@@ -42,6 +45,7 @@ const Navbar = () => {
             <Link to="/admin/all-appointments">All Appointments</Link>
           </>
         )}
+        <span className="role-chip">{user.role}</span>
         <button onClick={handleLogout}>Logout</button>
       </div>
     </nav>
