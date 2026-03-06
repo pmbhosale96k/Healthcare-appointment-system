@@ -1,122 +1,53 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from '../context/AuthContext';
-import Navbar from '../components/Navbar';
+import DashboardLayout from '../components/DashboardLayout';
 import Login from '../pages/auth/Login';
 import Register from '../pages/auth/Register';
-import PatientDashboard from '../pages/patient/PatientDashboard';
-import SearchDoctors from '../pages/patient/SearchDoctors';
-import BookAppointment from '../pages/patient/BookAppointment';
-import MyAppointments from '../pages/patient/MyAppointments';
+import UserDashboard from '../pages/user/UserDashboard';
+import SearchDoctors from '../pages/user/SearchDoctors';
+import BookAppointment from '../pages/user/BookAppointment';
+import MyAppointments from '../pages/user/MyAppointments';
 import DoctorDashboard from '../pages/doctor/DoctorDashboard';
 import DoctorAppointments from '../pages/doctor/DoctorAppointments';
 import SetAvailability from '../pages/doctor/SetAvailability';
 import AdminDashboard from '../pages/admin/AdminDashboard';
 import ManageDoctors from '../pages/admin/ManageDoctors';
+import ManageUsers from '../pages/admin/ManageUsers';
 import AllAppointments from '../pages/admin/AllAppointments';
 import ProtectedRoute from './ProtectedRoute';
+
+const withProtectedLayout = (component, allowedRoles) => (
+  <ProtectedRoute allowedRoles={allowedRoles}>
+    <DashboardLayout>{component}</DashboardLayout>
+  </ProtectedRoute>
+);
 
 const AppRoutes = () => {
   return (
     <AuthProvider>
-      <Router>
-        <Navbar />
-        <Routes>
-          {/* Public routes */}
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
+      <Routes>
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
 
-          {/* Patient routes */}
-          <Route
-            path="/patient/dashboard"
-            element={
-              <ProtectedRoute allowedRoles={['PATIENT']}>
-                <PatientDashboard />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/patient/search-doctors"
-            element={
-              <ProtectedRoute allowedRoles={['PATIENT']}>
-                <SearchDoctors />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/patient/book-appointment"
-            element={
-              <ProtectedRoute allowedRoles={['PATIENT']}>
-                <BookAppointment />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/patient/my-appointments"
-            element={
-              <ProtectedRoute allowedRoles={['PATIENT']}>
-                <MyAppointments />
-              </ProtectedRoute>
-            }
-          />
+        <Route path="/user/dashboard" element={withProtectedLayout(<UserDashboard />, ['USER'])} />
+        <Route path="/user/doctors" element={withProtectedLayout(<SearchDoctors />, ['USER'])} />
+        <Route path="/user/book/:doctorId" element={withProtectedLayout(<BookAppointment />, ['USER'])} />
+        <Route path="/user/appointments" element={withProtectedLayout(<MyAppointments />, ['USER'])} />
 
-          {/* Doctor routes */}
-          <Route
-            path="/doctor/dashboard"
-            element={
-              <ProtectedRoute allowedRoles={['DOCTOR']}>
-                <DoctorDashboard />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/doctor/appointments"
-            element={
-              <ProtectedRoute allowedRoles={['DOCTOR']}>
-                <DoctorAppointments />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/doctor/set-availability"
-            element={
-              <ProtectedRoute allowedRoles={['DOCTOR']}>
-                <SetAvailability />
-              </ProtectedRoute>
-            }
-          />
+        <Route path="/doctor/dashboard" element={withProtectedLayout(<DoctorDashboard />, ['DOCTOR'])} />
+        <Route path="/doctor/appointments" element={withProtectedLayout(<DoctorAppointments />, ['DOCTOR'])} />
+        <Route path="/doctor/availability" element={withProtectedLayout(<SetAvailability />, ['DOCTOR'])} />
 
-          {/* Admin routes */}
-          <Route
-            path="/admin/dashboard"
-            element={
-              <ProtectedRoute allowedRoles={['ADMIN']}>
-                <AdminDashboard />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/admin/manage-doctors"
-            element={
-              <ProtectedRoute allowedRoles={['ADMIN']}>
-                <ManageDoctors />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/admin/all-appointments"
-            element={
-              <ProtectedRoute allowedRoles={['ADMIN']}>
-                <AllAppointments />
-              </ProtectedRoute>
-            }
-          />
+        <Route path="/admin/dashboard" element={withProtectedLayout(<AdminDashboard />, ['ADMIN'])} />
+        <Route path="/admin/add-doctor" element={withProtectedLayout(<ManageDoctors />, ['ADMIN'])} />
+        <Route path="/admin/doctors" element={<Navigate to="/admin/add-doctor" replace />} />
+        <Route path="/admin/users" element={withProtectedLayout(<ManageUsers />, ['ADMIN'])} />
+        <Route path="/admin/appointments" element={withProtectedLayout(<AllAppointments />, ['ADMIN'])} />
 
-          {/* Default redirect */}
-          <Route path="/" element={<Navigate to="/login" replace />} />
-          <Route path="*" element={<Navigate to="/login" replace />} />
-        </Routes>
-      </Router>
+        <Route path="/" element={<Navigate to="/login" replace />} />
+        <Route path="*" element={<Navigate to="/login" replace />} />
+      </Routes>
     </AuthProvider>
   );
 };

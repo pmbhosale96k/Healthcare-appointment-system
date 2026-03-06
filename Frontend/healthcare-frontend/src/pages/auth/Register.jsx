@@ -7,8 +7,8 @@ const Register = () => {
     name: '',
     email: '',
     password: '',
-    role: 'PATIENT',
   });
+  const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
   const { register } = useAuth();
   const navigate = useNavigate();
@@ -22,20 +22,28 @@ const Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setSubmitting(true);
     setError('');
     const result = await register(formData);
     if (result.success) {
-      const role = result.user.role.toLowerCase();
+      if (result.requiresLogin) {
+        navigate('/login', { state: { message: 'Registration successful. Please login.' } });
+        return;
+      }
+      const role = (result.user?.role || 'USER').toLowerCase();
       navigate(`/${role}/dashboard`);
     } else {
       setError(result.error);
     }
+    setSubmitting(false);
   };
 
   return (
-    <div className="register-container">
-      <h2>Register</h2>
-      <form onSubmit={handleSubmit}>
+    <div className="auth-page register-container">
+      <div className="auth-panel">
+        <h2>Create Account</h2>
+        <p className="auth-subtitle">Create your user account to book healthcare appointments.</p>
+        <form className="auth-form" onSubmit={handleSubmit}>
         <div>
           <label>Name:</label>
           <input
@@ -66,21 +74,18 @@ const Register = () => {
             required
           />
         </div>
-        <div>
-          <label>Role:</label>
-          <select name="role" value={formData.role} onChange={handleChange}>
-            <option value="PATIENT">Patient</option>
-            <option value="DOCTOR">Doctor</option>
-          </select>
-        </div>
         {error && <p className="error">{error}</p>}
-        <button type="submit">Register</button>
-      </form>
-      <p>
-        Already have an account? <Link to="/login">Login</Link>
-      </p>
+        <button type="submit" disabled={submitting}>
+          {submitting ? 'Registering...' : 'Register'}
+        </button>
+        </form>
+        <p className="auth-switch">
+          Already have an account? <Link to="/login">Login</Link>
+        </p>
+      </div>
     </div>
   );
 };
 
 export default Register;
+

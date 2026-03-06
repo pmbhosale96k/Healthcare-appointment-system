@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
 const Navbar = () => {
@@ -11,7 +11,7 @@ const Navbar = () => {
     navigate('/login');
   };
 
-  if (!isAuthenticated) {
+  if (!isAuthenticated || !user) {
     return null;
   }
 
@@ -21,28 +21,51 @@ const Navbar = () => {
         <Link to={`/${user.role.toLowerCase()}/dashboard`}>Healthcare App</Link>
       </div>
       <div className="navbar-menu">
-        {user.role === 'PATIENT' && (
+        {user.role === 'USER' && (
           <>
-            <Link to="/patient/dashboard">Dashboard</Link>
-            <Link to="/patient/search-doctors">Search Doctors</Link>
-            <Link to="/patient/my-appointments">My Appointments</Link>
+            <NavLink className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')} to="/user/dashboard">
+              Dashboard
+            </NavLink>
+            <NavLink className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')} to="/user/doctors">
+              Search Doctors
+            </NavLink>
+            <NavLink className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')} to="/user/appointments">
+              My Appointments
+            </NavLink>
           </>
         )}
         {user.role === 'DOCTOR' && (
           <>
-            <Link to="/doctor/dashboard">Dashboard</Link>
-            <Link to="/doctor/appointments">Appointments</Link>
-            <Link to="/doctor/set-availability">Set Availability</Link>
+            <NavLink className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')} to="/doctor/dashboard">
+              Dashboard
+            </NavLink>
+            <NavLink className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')} to="/doctor/appointments">
+              Appointments
+            </NavLink>
+            <NavLink className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')} to="/doctor/availability">
+              Availability
+            </NavLink>
           </>
         )}
         {user.role === 'ADMIN' && (
           <>
-            <Link to="/admin/dashboard">Dashboard</Link>
-            <Link to="/admin/manage-doctors">Manage Doctors</Link>
-            <Link to="/admin/all-appointments">All Appointments</Link>
+            <NavLink className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')} to="/admin/dashboard">
+              Dashboard
+            </NavLink>
+            <NavLink className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')} to="/admin/add-doctor">
+              Manage Doctor
+            </NavLink>
+            <NavLink className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')} to="/admin/users">
+              Manage Users
+            </NavLink>
+            <NavLink className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')} to="/admin/appointments">
+              Appointments
+            </NavLink>
           </>
         )}
-        <button onClick={handleLogout}>Logout</button>
+        <button type="button" className="ghost-btn" onClick={handleLogout}>
+          Logout
+        </button>
       </div>
     </nav>
   );

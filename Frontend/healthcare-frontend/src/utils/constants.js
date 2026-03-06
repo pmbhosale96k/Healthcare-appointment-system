@@ -1,9 +1,9 @@
 // API base URL
-export const API_BASE_URL = 'http://localhost:8080/api';
+export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080/api';
 
 // User roles
 export const ROLES = {
-  PATIENT: 'PATIENT',
+  USER: 'USER',
   DOCTOR: 'DOCTOR',
   ADMIN: 'ADMIN'
 };
@@ -11,7 +11,6 @@ export const ROLES = {
 // Appointment statuses
 export const APPOINTMENT_STATUS = {
   PENDING: 'PENDING',
-  CONFIRMED: 'CONFIRMED',
-  CANCELLED: 'CANCELLED',
-  COMPLETED: 'COMPLETED'
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED'
 };

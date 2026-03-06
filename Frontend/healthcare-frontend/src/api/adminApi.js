@@ -24,3 +24,13 @@ export const getAllAppointments = async () => {
   const response = await axiosInstance.get('/admin/appointments');
   return response.data;
 };
+
+export const getAllUsers = async () => {
+  const response = await axiosInstance.get('/admin/users');
+  return response.data;
+};
+
+export const getHealthStatus = async () => {
+  const response = await axiosInstance.get('/health');
+  return response.data;
+};
