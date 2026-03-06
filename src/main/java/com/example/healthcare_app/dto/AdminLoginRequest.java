@@ -1,14 +1,9 @@
 package com.example.healthcare_app.dto;
 
-public class UserRegisterRequest {
+public class AdminLoginRequest {
 
-    private String name;
     private String email;
     private String password;
-
-    public String getName() {
-        return name;
-    }
 
     public String getEmail() {
         return email;
@@ -16,10 +11,6 @@ public class UserRegisterRequest {
 
     public String getPassword() {
         return password;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public void setEmail(String email) {

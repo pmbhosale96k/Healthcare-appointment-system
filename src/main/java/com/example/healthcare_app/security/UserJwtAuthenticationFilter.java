@@ -17,7 +17,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 public class UserJwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Autowired
-    private UserJwtUtil jwtUtil;
+    private JwtUtil jwtUtil;
 
     @Override
     protected void doFilterInternal(

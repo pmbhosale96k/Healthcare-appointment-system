@@ -7,7 +7,7 @@ import com.example.healthcare_app.entity.User;
 import com.example.healthcare_app.entity.UserToken;
 import com.example.healthcare_app.repository.UserRepository;
 import com.example.healthcare_app.repository.UserTokenRepository;
-import com.example.healthcare_app.security.UserJwtUtil;
+import com.example.healthcare_app.security.JwtUtil;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -34,7 +34,7 @@ public class UserAuthService {
     private EmailService emailService;
 
     @Autowired
-    private UserJwtUtil jwtUtil;
+    private JwtUtil jwtUtil;
 
 
     // ================= REGISTER USER =================
@@ -88,7 +88,7 @@ public class UserAuthService {
             );
         }
 
-        String accessToken = jwtUtil.generateAccessToken(user.getEmail());
+        String accessToken = jwtUtil.generateToken(user.getEmail());
         String refreshToken = jwtUtil.generateRefreshToken(user.getEmail());
 
         LocalDateTime accessExpiry = jwtUtil.accessExpiry();
@@ -128,7 +128,7 @@ public class UserAuthService {
 
         String email = stored.getEmail();
 
-        String newAccess = jwtUtil.generateAccessToken(email);
+        String newAccess = jwtUtil.generateToken(email);
         String newRefresh = jwtUtil.generateRefreshToken(email);
 
         stored.setAccessToken(newAccess);
