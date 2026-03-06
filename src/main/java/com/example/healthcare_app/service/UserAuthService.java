@@ -36,12 +36,17 @@ public class UserAuthService {
     @Autowired
     private UserJwtUtil jwtUtil;
 
+
+    // ================= REGISTER USER =================
     public String register(UserRegisterRequest request){
 
         Optional<User> existing = userRepository.findByEmail(request.getEmail());
 
         if(existing.isPresent()){
-            return "Email already exists";
+            throw new ResponseStatusException(
+                    HttpStatus.CONFLICT,
+                    "Email already exists"
+            );
         }
 
         String encodedPassword = passwordEncoder.encode(request.getPassword());
@@ -54,18 +59,33 @@ public class UserAuthService {
 
         userRepository.save(user);
 
-        emailService.sendRegistrationEmail(user.getEmail(),user.getName());
+        // Email sending wrapped in try-catch so API never fails
+        try {
+            emailService.sendRegistrationEmail(user.getEmail(), user.getName());
+        } catch (Exception e) {
+            System.out.println("Email sending failed: " + e.getMessage());
+        }
 
         return "User Registered Successfully";
     }
 
+
+    // ================= LOGIN USER =================
     public UserLoginResponse login(UserLoginRequest request){
 
         User user = userRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() ->
+                        new ResponseStatusException(
+                                HttpStatus.NOT_FOUND,
+                                "User not found"
+                        )
+                );
 
         if(!passwordEncoder.matches(request.getPassword(), user.getPassword())){
-            throw new RuntimeException("Invalid password");
+            throw new ResponseStatusException(
+                    HttpStatus.UNAUTHORIZED,
+                    "Invalid password"
+            );
         }
 
         String accessToken = jwtUtil.generateAccessToken(user.getEmail());
@@ -86,14 +106,24 @@ public class UserAuthService {
 
         return new UserLoginResponse(accessToken, refreshToken);
     }
+
+
+    // ================= REFRESH TOKEN =================
     public UserLoginResponse refresh(String refreshToken){
 
         UserToken stored = userTokenRepository.findByRefreshToken(refreshToken)
                 .orElseThrow(() ->
-                        new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid refresh token"));
+                        new ResponseStatusException(
+                                HttpStatus.UNAUTHORIZED,
+                                "Invalid refresh token"
+                        )
+                );
 
         if(stored.getRefreshExpiry().isBefore(LocalDateTime.now())){
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Refresh token expired");
+            throw new ResponseStatusException(
+                    HttpStatus.UNAUTHORIZED,
+                    "Refresh token expired"
+            );
         }
 
         String email = stored.getEmail();
