@@ -1,10 +1,10 @@
 package com.example.healthcare_app.controller;
 
-import com.example.healthcare_app.entity.Appointment;
+import com.example.healthcare_app.entity.DoctorAppointment;
 import com.example.healthcare_app.entity.Doctor;
 import com.example.healthcare_app.repository.DoctorRepository;
-import com.example.healthcare_app.security.JwtUtil;
-import com.example.healthcare_app.service.AppointmentService;
+import com.example.healthcare_app.security.AdminJwtUtil;
+import com.example.healthcare_app.service.AdminAppointmentService;
 
 import org.springframework.web.bind.annotation.*;
 
@@ -12,15 +12,15 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/doctor")
-public class DoctorController {
+public class Admin_DoctorController {
 
-    private final AppointmentService appointmentService;
+    private final AdminAppointmentService appointmentService;
     private final DoctorRepository doctorRepository;
-    private final JwtUtil jwtUtil;
+    private final AdminJwtUtil jwtUtil;
 
-    public DoctorController(AppointmentService appointmentService,
+    public Admin_DoctorController(AdminAppointmentService appointmentService,
                             DoctorRepository doctorRepository,
-                            JwtUtil jwtUtil) {
+                            AdminJwtUtil jwtUtil) {
 
         this.appointmentService = appointmentService;
         this.doctorRepository = doctorRepository;
@@ -35,7 +35,7 @@ public class DoctorController {
 
     // Doctor Appointments
     @GetMapping("/appointments")
-    public List<Appointment> getAppointments() {
+    public List<DoctorAppointment> getAppointments() {
         return appointmentService.getAllAppointments();
     }
 

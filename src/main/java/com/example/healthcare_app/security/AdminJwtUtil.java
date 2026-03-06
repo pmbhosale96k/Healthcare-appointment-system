@@ -11,7 +11,7 @@ import javax.crypto.SecretKey;
 import java.util.Date;
 
 @Component
-public class JwtUtil {
+public class AdminJwtUtil {
 
     // must be at least 256 bits (32+ chars)
     private static final String SECRET =
