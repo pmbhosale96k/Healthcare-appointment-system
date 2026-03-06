@@ -19,7 +19,7 @@ public class JwtUtil {
             "healthcare-secret-key-healthcare-secret-key";
 
     private static final long ACCESS_EXPIRATION = 1000 * 60 * 15; // 15 min
-    private static final long REFRESH_EXPIRATION = 1000 * 60 * 60 * 24; // 24 hours
+    private static final long REFRESH_EXPIRATION = 1000 * 60 * 60 * 24 * 30; // 24 hours
 
     private final SecretKey key =
             Keys.hmacShaKeyFor(SECRET.getBytes(StandardCharsets.UTF_8));
