@@ -9,7 +9,9 @@ import java.util.List;
 
 public interface AppointmentRepository extends JpaRepository<Appointment, Long> {
 
+    // Get appointments for a specific patient
     List<Appointment> findByEmail(String email);
 
-    boolean existsByAppointmentDateAndAppointmentTime(LocalDate date, LocalTime time);
+    // Prevent duplicate bookings for same slot
+    boolean existsByAppointmentDateAndAppointmentTime(LocalDate appointmentDate, LocalTime appointmentTime);
 }

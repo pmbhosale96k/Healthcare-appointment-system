@@ -1,9 +1,11 @@
 package com.example.healthcare_app.service;
 
-import com.example.healthcare_app.dto.*;
+import com.example.healthcare_app.dto.UserAppointmentRequest;
+import com.example.healthcare_app.dto.UserAppointmentResponse;
 import com.example.healthcare_app.entity.Appointment;
 import com.example.healthcare_app.enums.AppointmentStatus;
 import com.example.healthcare_app.repository.AppointmentRepository;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +19,7 @@ public class AppointmentService {
 
     private final AppointmentRepository appointmentRepository;
 
+    // Book appointment
     public void bookAppointment(UserAppointmentRequest request){
 
         if(request.getAppointmentTime().isBefore(LocalTime.of(10,0)) ||
@@ -32,7 +35,7 @@ public class AppointmentService {
 
         if(exists){
             throw new RuntimeException(
-                    "Appointmet is already booked at this time. please select a time after 10 minutes."
+                    "Appointment is already booked at this time. Please select another slot."
             );
         }
 
@@ -48,6 +51,7 @@ public class AppointmentService {
         appointmentRepository.save(appointment);
     }
 
+    // Get appointments for user
     public List<UserAppointmentResponse> getAppointmentsByEmail(String email){
 
         return appointmentRepository.findByEmail(email)
@@ -61,6 +65,12 @@ public class AppointmentService {
                 .collect(Collectors.toList());
     }
 
+    // Doctor/Admin get all appointments
+    public List<Appointment> getAllAppointments() {
+        return appointmentRepository.findAll();
+    }
+
+    // Update appointment status
     public void updateStatus(Long id, AppointmentStatus status){
 
         Appointment appointment = appointmentRepository.findById(id)
@@ -70,5 +80,4 @@ public class AppointmentService {
 
         appointmentRepository.save(appointment);
     }
-
 }
