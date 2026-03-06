@@ -1,13 +1,13 @@
 package com.example.healthcare_app.service;
 
-import com.example.healthcare_app.dto.LoginRequest;
-import com.example.healthcare_app.dto.LoginResponse;
-import com.example.healthcare_app.dto.RegisterRequest;
+import com.example.healthcare_app.dto.UserLoginRequest;
+import com.example.healthcare_app.dto.UserLoginResponse;
+import com.example.healthcare_app.dto.UserRegisterRequest;
 import com.example.healthcare_app.entity.User;
 import com.example.healthcare_app.entity.UserToken;
 import com.example.healthcare_app.repository.UserRepository;
 import com.example.healthcare_app.repository.UserTokenRepository;
-import com.example.healthcare_app.security.JwtUtil;
+import com.example.healthcare_app.security.UserJwtUtil;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -34,9 +34,9 @@ public class UserAuthService {
     private EmailService emailService;
 
     @Autowired
-    private JwtUtil jwtUtil;
+    private UserJwtUtil jwtUtil;
 
-    public String register(RegisterRequest request){
+    public String register(UserRegisterRequest request){
 
         Optional<User> existing = userRepository.findByEmail(request.getEmail());
 
@@ -59,7 +59,7 @@ public class UserAuthService {
         return "User Registered Successfully";
     }
 
-    public LoginResponse login(LoginRequest request){
+    public UserLoginResponse login(UserLoginRequest request){
 
         User user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new RuntimeException("User not found"));
@@ -84,9 +84,9 @@ public class UserAuthService {
 
         userTokenRepository.save(token);
 
-        return new LoginResponse(accessToken, refreshToken);
+        return new UserLoginResponse(accessToken, refreshToken);
     }
-    public LoginResponse refresh(String refreshToken){
+    public UserLoginResponse refresh(String refreshToken){
 
         UserToken stored = userTokenRepository.findByRefreshToken(refreshToken)
                 .orElseThrow(() ->
@@ -108,6 +108,6 @@ public class UserAuthService {
 
         userTokenRepository.save(stored);
 
-        return new LoginResponse(newAccess, newRefresh);
+        return new UserLoginResponse(newAccess, newRefresh);
     }
 }

@@ -23,7 +23,7 @@ public class UserAuthController {
 
     // REGISTER USER
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody RegisterRequest request) {
+    public ResponseEntity<?> register(@RequestBody UserRegisterRequest request) {
 
         String response = userAuthService.register(request);
 
@@ -33,9 +33,9 @@ public class UserAuthController {
 
     // LOGIN USER
     @PostMapping("/login")
-    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) {
+    public ResponseEntity<UserLoginResponse> login(@RequestBody UserLoginRequest request) {
 
-        LoginResponse response = userAuthService.login(request);
+        UserLoginResponse response = userAuthService.login(request);
 
         return ResponseEntity.ok(response);
     }
@@ -43,9 +43,9 @@ public class UserAuthController {
 
     // REFRESH TOKEN
     @PostMapping("/refresh")
-    public ResponseEntity<LoginResponse> refreshToken(@RequestBody RefreshTokenRequest request) {
+    public ResponseEntity<UserLoginResponse> refreshToken(@RequestBody UserRefreshTokenRequest request) {
 
-        LoginResponse response = userAuthService.refresh(request.getRefreshToken());
+        UserLoginResponse response = userAuthService.refresh(request.getRefreshToken());
 
         return ResponseEntity.ok(response);
     }

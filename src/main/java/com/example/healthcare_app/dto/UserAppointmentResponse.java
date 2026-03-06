@@ -9,7 +9,7 @@ import java.time.LocalTime;
 
 @Data
 @Builder
-public class AppointmentResponse {
+public class UserAppointmentResponse {
 
     private String name;
 

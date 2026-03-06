@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 import java.util.Date;
 
 @Component
-public class JwtUtil {
+public class UserJwtUtil {
 
     // MUST be at least 32 characters
     private static final String SECRET =

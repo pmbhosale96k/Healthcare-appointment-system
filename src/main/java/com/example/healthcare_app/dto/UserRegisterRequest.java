@@ -1,6 +1,6 @@
 package com.example.healthcare_app.dto;
 
-public class RegisterRequest {
+public class UserRegisterRequest {
 
     private String name;
     private String email;
