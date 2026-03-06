@@ -5,7 +5,7 @@ import com.example.healthcare_app.entity.Admin;
 import com.example.healthcare_app.entity.Doctor;
 import com.example.healthcare_app.repository.AdminRepository;
 import com.example.healthcare_app.repository.DoctorRepository;
-import com.example.healthcare_app.security.AdminJwtUtil;
+import com.example.healthcare_app.security.JwtUtil;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -13,11 +13,11 @@ public class AdminAuthService {
 
     private final AdminRepository adminRepository;
     private final DoctorRepository doctorRepository;
-    private final AdminJwtUtil jwtUtil;
+    private final JwtUtil jwtUtil;
 
     public AdminAuthService(AdminRepository adminRepository,
                        DoctorRepository doctorRepository,
-                       AdminJwtUtil jwtUtil) {
+                       JwtUtil jwtUtil) {
 
         this.adminRepository = adminRepository;
         this.doctorRepository = doctorRepository;

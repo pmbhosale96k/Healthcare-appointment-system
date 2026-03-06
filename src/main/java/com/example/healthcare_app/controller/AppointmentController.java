@@ -1,5 +1,4 @@
-
-<<<<<<< HEAD
+package com.example.healthcare_app.controller;
 import com.example.healthcare_app.dto.*;
 import com.example.healthcare_app.enums.AppointmentStatus;
 import com.example.healthcare_app.service.AppointmentService;
@@ -64,5 +63,3 @@ public class AppointmentController {
     }
 
 }
-=======
->>>>>>> 5e3927c (unecessary files delted)

@@ -1,7 +1,7 @@
 package com.example.healthcare_app.service;
 
-import com.example.healthcare_app.entity.DoctorAppointment;
-import com.example.healthcare_app.repository.DoctorAppointmentRepository;
+import com.example.healthcare_app.entity.Appointment;
+import com.example.healthcare_app.repository.AppointmentRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -9,13 +9,13 @@ import java.util.List;
 @Service
 public class AdminAppointmentService {
 
-    private final DoctorAppointmentRepository appointmentRepository;
+    private final AppointmentRepository appointmentRepository;
 
-    public AdminAppointmentService(DoctorAppointmentRepository appointmentRepository) {
+    public AdminAppointmentService(AppointmentRepository appointmentRepository) {
         this.appointmentRepository = appointmentRepository;
     }
 
-    public List<DoctorAppointment> getAllAppointments() {
+    public List<Appointment> getAllAppointments() {
         return appointmentRepository.findAll();
     }
 }
