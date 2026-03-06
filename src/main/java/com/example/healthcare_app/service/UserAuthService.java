@@ -10,8 +10,10 @@ import com.example.healthcare_app.repository.UserTokenRepository;
 import com.example.healthcare_app.security.JwtUtil;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -87,10 +89,11 @@ public class UserAuthService {
     public LoginResponse refresh(String refreshToken){
 
         UserToken stored = userTokenRepository.findByRefreshToken(refreshToken)
-                .orElseThrow(() -> new RuntimeException("Invalid refresh token"));
+                .orElseThrow(() ->
+                        new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid refresh token"));
 
         if(stored.getRefreshExpiry().isBefore(LocalDateTime.now())){
-            throw new RuntimeException("Refresh token expired");
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Refresh token expired");
         }
 
         String email = stored.getEmail();
