@@ -7,7 +7,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 @Data
-public class AppointmentRequest {
+public class UserAppointmentRequest {
 
     @NotBlank
     private String name;

@@ -23,7 +23,7 @@ public class AppointmentController {
      */
     @PostMapping("/book")
     public String bookAppointment(
-            @RequestBody AppointmentRequest request,
+            @RequestBody UserAppointmentRequest request,
             Authentication authentication
     ){
 
@@ -41,7 +41,7 @@ public class AppointmentController {
      * Get appointments for logged-in user
      */
     @GetMapping("/my")
-    public List<AppointmentResponse> getMyAppointments(Authentication authentication){
+    public List<UserAppointmentResponse> getMyAppointments(Authentication authentication){
 
         String email = authentication.getName();
 

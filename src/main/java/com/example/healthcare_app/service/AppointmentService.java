@@ -7,12 +7,9 @@ import com.example.healthcare_app.repository.AppointmentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.time.LocalTime;
-import java.time.chrono.ChronoLocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.time.LocalTime;
 
 @Service
 @RequiredArgsConstructor
@@ -20,7 +17,7 @@ public class AppointmentService {
 
     private final AppointmentRepository appointmentRepository;
 
-    public void bookAppointment(AppointmentRequest request){
+    public void bookAppointment(UserAppointmentRequest request){
 
         if(request.getAppointmentTime().isBefore(LocalTime.of(10,0)) ||
            request.getAppointmentTime().isAfter(LocalTime.of(22,0))){
@@ -51,11 +48,11 @@ public class AppointmentService {
         appointmentRepository.save(appointment);
     }
 
-    public List<AppointmentResponse> getAppointmentsByEmail(String email){
+    public List<UserAppointmentResponse> getAppointmentsByEmail(String email){
 
         return appointmentRepository.findByEmail(email)
                 .stream()
-                .map(a -> AppointmentResponse.builder()
+                .map(a -> UserAppointmentResponse.builder()
                         .name(a.getName())
                         .appointmentDate(a.getAppointmentDate())
                         .appointmentTime(a.getAppointmentTime())
