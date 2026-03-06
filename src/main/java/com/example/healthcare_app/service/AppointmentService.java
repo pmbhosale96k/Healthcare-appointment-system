@@ -1,22 +1,21 @@
 package com.example.healthcare_app.service;
 
-import com.example.healthcare_app.dto.AppointmentRequestDto;
 import com.example.healthcare_app.entity.Appointment;
-import java.util.Collections;
-import java.util.List;
+import com.example.healthcare_app.repository.AppointmentRepository;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class AppointmentService {
 
-    public Appointment createAppointment(AppointmentRequestDto request) {
-        return null;
+    private final AppointmentRepository appointmentRepository;
+
+    public AppointmentService(AppointmentRepository appointmentRepository) {
+        this.appointmentRepository = appointmentRepository;
     }
 
     public List<Appointment> getAllAppointments() {
-        return Collections.emptyList();
-    }
-
-    public void cancelAppointment(Long id) {
+        return appointmentRepository.findAll();
     }
 }
