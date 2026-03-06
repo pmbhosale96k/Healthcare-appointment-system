@@ -7,8 +7,12 @@ import com.example.healthcare_app.repository.AppointmentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.chrono.ChronoLocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.time.LocalTime;
 
 @Service
 @RequiredArgsConstructor
@@ -17,6 +21,23 @@ public class AppointmentService {
     private final AppointmentRepository appointmentRepository;
 
     public void bookAppointment(AppointmentRequest request){
+
+        if(request.getAppointmentTime().isBefore(LocalTime.of(10,0)) ||
+           request.getAppointmentTime().isAfter(LocalTime.of(22,0))){
+            throw new RuntimeException("Appointments are allowed only between 10:00 AM and 10:00 PM");
+        }
+
+        boolean exists = appointmentRepository
+                .existsByAppointmentDateAndAppointmentTime(
+                        request.getAppointmentDate(),
+                        request.getAppointmentTime()
+                );
+
+        if(exists){
+            throw new RuntimeException(
+                    "Appointmet is already booked at this time. please select a time after 10 minutes."
+            );
+        }
 
         Appointment appointment = Appointment.builder()
                 .name(request.getName())

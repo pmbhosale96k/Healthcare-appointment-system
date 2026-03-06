@@ -1,15 +1,11 @@
 package com.example.healthcare_app.controller;
 
-import com.example.healthcare_app.dto.LoginRequest;
-import com.example.healthcare_app.dto.LoginResponse;
-import com.example.healthcare_app.dto.RefreshTokenRequest;
-import com.example.healthcare_app.dto.RegisterRequest;
+import com.example.healthcare_app.dto.*;
 import com.example.healthcare_app.entity.User;
 import com.example.healthcare_app.repository.UserRepository;
-
-import com.example.healthcare_app.security.JwtUtil;
 import com.example.healthcare_app.service.UserAuthService;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,27 +14,39 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/user")
+@RequiredArgsConstructor
 public class UserAuthController {
 
-    @Autowired
-    private UserAuthService userAuthService;
-
-    @Autowired
-    private UserRepository userRepository;
+    private final UserAuthService userAuthService;
+    private final UserRepository userRepository;
 
 
     // REGISTER USER
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody RegisterRequest request) {
+
         String response = userAuthService.register(request);
+
         return ResponseEntity.ok(response);
     }
 
 
     // LOGIN USER
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequest request) {
-        String response = String.valueOf(userAuthService.login(request));
+    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) {
+
+        LoginResponse response = userAuthService.login(request);
+
+        return ResponseEntity.ok(response);
+    }
+
+
+    // REFRESH TOKEN
+    @PostMapping("/refresh")
+    public ResponseEntity<LoginResponse> refreshToken(@RequestBody RefreshTokenRequest request) {
+
+        LoginResponse response = userAuthService.refresh(request.getRefreshToken());
+
         return ResponseEntity.ok(response);
     }
 
@@ -62,6 +70,7 @@ public class UserAuthController {
     public ResponseEntity<List<User>> getAllUsers(){
 
         List<User> users = userRepository.findAll();
+
         return ResponseEntity.ok(users);
     }
 
@@ -75,17 +84,8 @@ public class UserAuthController {
         }
 
         userRepository.deleteById(id);
+
         return ResponseEntity.ok("User deleted successfully");
-    }
-
-    @PostMapping("/refresh")
-    public LoginResponse refreshToken(@RequestBody RefreshTokenRequest request){
-
-        String email = JwtUtil.extractEmail(request.getRefreshToken());
-
-        String newAccessToken = JwtUtil.generateAccessToken(email);
-
-        return new LoginResponse(newAccessToken, request.getRefreshToken());
     }
 
 }
