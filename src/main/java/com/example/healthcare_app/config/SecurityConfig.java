@@ -18,11 +18,17 @@ public class SecurityConfig {
 
         http.csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
-                    .requestMatchers("/auth/**").permitAll()
-                    .requestMatchers("/admin/**").permitAll()
-                    .requestMatchers("/doctor/**").permitAll()
-                    .requestMatchers("/patient/**").permitAll()
-                    .anyRequest().permitAll()
+                // Auth & Patient/User paths
+                .requestMatchers("/auth/**").permitAll()
+                .requestMatchers("/api/user/**").permitAll() // Srujan's path
+                .requestMatchers("/patient/**").permitAll()  // Your patient path
+                
+                // Admin & Doctor paths
+                .requestMatchers("/admin/**").permitAll()
+                .requestMatchers("/doctor/**").permitAll()
+                
+                // Catch-all
+                .anyRequest().permitAll()
             );
 
         return http.build();

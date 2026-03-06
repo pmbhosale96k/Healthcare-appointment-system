@@ -1,6 +1,6 @@
 package com.example.healthcare_app.controller;
 
-import com.example.healthcare_app.dto.LoginRequest;
+import com.example.healthcare_app.dto.AdminLoginRequest;
 import com.example.healthcare_app.service.AuthService;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,8 +14,13 @@ public class AuthController {
         this.authService = authService;
     }
 
+    @PostMapping("/admin/login")
+    public String adminLogin(@RequestBody AdminLoginRequest request) {
+        return authService.adminLogin(request);
+    }
+
     @PostMapping("/doctor/login")
-    public String doctorLogin(@RequestBody LoginRequest request) {
+    public String doctorLogin(@RequestBody AdminLoginRequest request) {
         return authService.doctorLogin(request);
     }
 }

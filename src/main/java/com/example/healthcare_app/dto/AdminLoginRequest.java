@@ -1,6 +1,6 @@
 package com.example.healthcare_app.dto;
 
-public class LoginRequest {
+public class AdminLoginRequest {
 
     private String email;
     private String password;

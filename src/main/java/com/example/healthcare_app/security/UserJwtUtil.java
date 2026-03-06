@@ -2,7 +2,6 @@ package com.example.healthcare_app.security;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.stereotype.Component;
 
@@ -14,68 +13,76 @@ import java.util.Date;
 @Component
 public class UserJwtUtil {
 
-    // MUST be at least 32 characters
+    // Must be at least 32 characters
     private static final String SECRET =
             "healthcare-secret-key-healthcare-secret-key";
 
-    private static final long ACCESS_EXPIRATION = 1000 * 60 * 15; // 15 min
-    private static final long REFRESH_EXPIRATION = 1000 * 60 * 60 * 24 * 30; // 24 hours
+    private static final long ACCESS_EXPIRATION = 1000 * 60 * 15; // 15 minutes
+    private static final long REFRESH_EXPIRATION = 1000 * 60 * 60 * 24 * 30; // 30 days
 
     private final SecretKey key =
             Keys.hmacShaKeyFor(SECRET.getBytes(StandardCharsets.UTF_8));
 
 
-
     // Generate Access Token
-    public String generateAccessToken(String email){
+    public String generateAccessToken(String email) {
 
         return Jwts.builder()
-                .setSubject(email)
-                .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + ACCESS_EXPIRATION))
-                .signWith(key, SignatureAlgorithm.HS256)
+                .subject(email)
+                .issuedAt(new Date())
+                .expiration(new Date(System.currentTimeMillis() + ACCESS_EXPIRATION))
+                .signWith(key)
                 .compact();
     }
-
 
 
     // Generate Refresh Token
-    public String generateRefreshToken(String email){
+    public String generateRefreshToken(String email) {
 
         return Jwts.builder()
-                .setSubject(email)
-                .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + REFRESH_EXPIRATION))
-                .signWith(key, SignatureAlgorithm.HS256)
+                .subject(email)
+                .issuedAt(new Date())
+                .expiration(new Date(System.currentTimeMillis() + REFRESH_EXPIRATION))
+                .signWith(key)
                 .compact();
     }
 
 
+    // Extract Email from Token
+    public String extractEmail(String token) {
 
-    // Extract Email
-    public String extractEmail(String token){
-
-        Claims claims = Jwts.parserBuilder()
-                .setSigningKey(key)
+        Claims claims = Jwts.parser()
+                .verifyWith(key)
                 .build()
-                .parseClaimsJws(token)
-                .getBody();
+                .parseSignedClaims(token)
+                .getPayload();
 
         return claims.getSubject();
     }
 
 
+    // Check if token expired
+    public boolean isTokenExpired(String token) {
 
-    // Access Token Expiry Time (for DB)
-    public LocalDateTime accessExpiry(){
+        Date expiration = Jwts.parser()
+                .verifyWith(key)
+                .build()
+                .parseSignedClaims(token)
+                .getPayload()
+                .getExpiration();
+
+        return expiration.before(new Date());
+    }
+
+
+    // Access Token Expiry (for DB)
+    public LocalDateTime accessExpiry() {
         return LocalDateTime.now().plusMinutes(15);
     }
 
 
-
-    // Refresh Token Expiry Time (for DB)
-    public LocalDateTime refreshExpiry(){
-        return LocalDateTime.now().plusDays(1);
+    // Refresh Token Expiry (for DB)
+    public LocalDateTime refreshExpiry() {
+        return LocalDateTime.now().plusDays(30);
     }
-
 }
