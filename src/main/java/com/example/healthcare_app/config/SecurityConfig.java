@@ -21,17 +21,12 @@ public class SecurityConfig {
         http.cors(Customizer.withDefaults())
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
-                // Auth & Patient/User paths
+                // Public auth and health endpoints
                 .requestMatchers("/auth/**").permitAll()
-                .requestMatchers("/api/user/**").permitAll() // Srujan's path
-                .requestMatchers("/patient/**").permitAll()  // Your patient path
-                
-                // Admin & Doctor paths
-                .requestMatchers("/admin/**").permitAll()
-                .requestMatchers("/doctor/**").permitAll()
-                
-                // Catch-all
-                .anyRequest().permitAll()
+                .requestMatchers("/api/user/register", "/api/user/login", "/api/user/refresh").permitAll()
+                .requestMatchers("/api/health", "/actuator/health").permitAll()
+                // All other endpoints require a valid token
+                .anyRequest().authenticated()
             )
             .addFilterBefore(userJwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 

@@ -1,10 +1,16 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
 const Navbar = () => {
   const { user, logout, isAuthenticated } = useAuth();
   const navigate = useNavigate();
+  const [theme, setTheme] = useState(() => localStorage.getItem('theme') || 'light');
+
+  useEffect(() => {
+    document.body.setAttribute('data-theme', theme);
+    localStorage.setItem('theme', theme);
+  }, [theme]);
 
   const handleLogout = () => {
     logout();
@@ -46,6 +52,13 @@ const Navbar = () => {
           </>
         )}
         <span className="role-chip">{user.role}</span>
+        <button
+          type="button"
+          className="theme-toggle-single"
+          onClick={() => setTheme((prev) => (prev === 'dark' ? 'light' : 'dark'))}
+        >
+          {theme === 'dark' ? 'Light Mode' : 'Dark Mode'}
+        </button>
         <button onClick={handleLogout}>Logout</button>
       </div>
     </nav>
