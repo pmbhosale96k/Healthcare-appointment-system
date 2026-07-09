@@ -1,0 +1,342 @@
+.fc-dashboard-container {
+  min-height: calc(100vh - 72px);
+  width: 100%;
+  padding: 1rem;
+}
+
+.fc-main-content {
+  width: min(1200px, 100%);
+  margin: 0 auto;
+}
+
+.fc-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.fc-header h1 {
+  margin: 0;
+  font-size: clamp(1.4rem, 3vw, 2rem);
+}
+
+.fc-subtitle {
+  margin: 0.25rem 0 0;
+  color: var(--ink-700);
+}
+
+.fc-status-pill {
+  padding: 0.35rem 0.65rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  color: var(--ink-900);
+  background: color-mix(in srgb, var(--brand) 18%, transparent);
+  border: 1px solid color-mix(in srgb, var(--brand) 35%, transparent);
+}
+
+.fc-error {
+  margin-bottom: 1rem;
+  padding: 0.75rem 0.9rem;
+  border-radius: 0.8rem;
+  border: 1px solid #ffb4ab;
+  background: #ffe2df;
+  color: #a53123;
+  font-weight: 700;
+}
+
+.fc-bento-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 1rem;
+}
+
+.fc-glass-card {
+  background: var(--card);
+  border: 1px solid rgba(168, 188, 186, 0.45);
+  border-radius: 1rem;
+  box-shadow: var(--shadow);
+  padding: 1rem;
+}
+
+.fc-card-title {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin-bottom: 0.8rem;
+  color: var(--ink-700);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.card-profile {
+  grid-column: span 3;
+}
+
+.card-summary {
+  grid-column: span 5;
+}
+
+.card-next {
+  grid-column: span 4;
+}
+
+.card-chart {
+  grid-column: span 8;
+  min-height: 280px;
+}
+
+.card-approved,
+.card-pending,
+.card-doctors,
+.card-actions {
+  grid-column: span 3;
+}
+
+.card-recent {
+  grid-column: span 12;
+}
+
+.patient-profile {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.patient-avatar {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  color: #fff;
+  font-weight: 800;
+  background: linear-gradient(140deg, var(--brand), color-mix(in srgb, var(--accent) 45%, var(--brand)));
+}
+
+.patient-details h3 {
+  margin: 0;
+}
+
+.patient-details p {
+  margin: 0.2rem 0 0;
+  color: var(--ink-700);
+  font-size: 0.85rem;
+  word-break: break-all;
+}
+
+.vitals-grid {
+  margin-top: 0.9rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.8rem;
+}
+
+.vital-item .label {
+  color: var(--ink-700);
+  font-size: 0.8rem;
+}
+
+.vital-item .value {
+  font-size: 1.1rem;
+  font-weight: 800;
+}
+
+.fc-stats-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.8rem;
+}
+
+.fc-stat-block {
+  border-radius: 0.8rem;
+  border: 1px solid rgba(168, 188, 186, 0.35);
+  padding: 0.8rem;
+}
+
+.fc-stat-label {
+  color: var(--ink-700);
+  font-size: 0.8rem;
+}
+
+.fc-stat-value {
+  margin-top: 0.35rem;
+  font-size: 1.5rem;
+  font-weight: 900;
+}
+
+.fc-stat-value.approved {
+  color: #126a35;
+}
+
+.fc-stat-value.rejected {
+  color: #a53123;
+}
+
+.fc-next-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.fc-next-date {
+  font-size: 0.92rem;
+  color: var(--ink-700);
+}
+
+.fc-next-time {
+  font-size: 1.5rem;
+  font-weight: 900;
+}
+
+.fc-next-name {
+  font-size: 0.95rem;
+}
+
+.fc-chart-wrap {
+  width: 100%;
+  height: 220px;
+}
+
+.fc-value-large {
+  font-size: 2rem;
+  font-weight: 900;
+}
+
+.fc-mini-label {
+  margin-top: 0.4rem;
+  font-size: 0.8rem;
+  color: var(--ink-700);
+}
+
+.fc-actions-grid {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.fc-link-btn {
+  border-radius: 0.7rem;
+  border: 1px solid rgba(31, 139, 132, 0.25);
+  padding: 0.58rem 0.72rem;
+  font-weight: 700;
+  color: var(--brand-strong);
+  background: color-mix(in srgb, var(--brand) 8%, transparent);
+  transition: 0.2s ease;
+}
+
+.fc-link-btn:hover {
+  transform: translateY(-1px);
+  border-color: rgba(31, 139, 132, 0.45);
+}
+
+.fc-list {
+  display: grid;
+  gap: 0.55rem;
+}
+
+.fc-list-row {
+  border: 1px solid rgba(168, 188, 186, 0.35);
+  border-radius: 0.75rem;
+  padding: 0.65rem;
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.fc-list-row p {
+  margin: 0.2rem 0 0;
+  color: var(--ink-700);
+  font-size: 0.8rem;
+}
+
+.fc-empty {
+  color: var(--ink-700);
+  font-size: 0.9rem;
+}
+
+.fc-status-indicator {
+  align-self: center;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  border-radius: 999px;
+  padding: 0.24rem 0.55rem;
+  border: 1px solid transparent;
+}
+
+.fc-status-indicator.pending {
+  background: #fff2d5;
+  border-color: #f6d593;
+  color: #8b5c00;
+}
+
+.fc-status-indicator.approved {
+  background: #def7e6;
+  border-color: #9cddb0;
+  color: #126a35;
+}
+
+.fc-status-indicator.rejected {
+  background: #ffe2df;
+  border-color: #ffb4ab;
+  color: #a53123;
+}
+
+.fc-tooltip {
+  background: var(--card);
+  border: 1px solid rgba(168, 188, 186, 0.5);
+  border-radius: 0.6rem;
+  padding: 0.45rem 0.6rem;
+  box-shadow: var(--shadow);
+}
+
+.fc-tooltip-label {
+  color: var(--ink-700);
+  font-size: 0.75rem;
+}
+
+.fc-tooltip-value {
+  font-weight: 800;
+  margin-top: 0.2rem;
+}
+
+:root {
+  --chart-line: #1f8b84;
+  --chart-grid: rgba(20, 33, 39, 0.1);
+  --muted-text: #4a5b62;
+}
+
+body[data-theme='dark'] {
+  --chart-line: #66d6cd;
+  --chart-grid: rgba(255, 255, 255, 0.12);
+  --muted-text: #b2c1c7;
+}
+
+body[data-theme='night'] {
+  --chart-line: #9ed9ff;
+  --chart-grid: rgba(255, 255, 255, 0.15);
+  --muted-text: #c6d2dd;
+}
+
+@media (max-width: 1080px) {
+  .card-profile,
+  .card-summary,
+  .card-next,
+  .card-chart,
+  .card-approved,
+  .card-pending,
+  .card-doctors,
+  .card-actions,
+  .card-recent {
+    grid-column: span 12;
+  }
+
+  .fc-stats-row {
+    grid-template-columns: 1fr;
+  }
+}
