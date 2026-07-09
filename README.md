@@ -160,6 +160,6 @@ spring.datasource.password=your_password
 
 **Pratham Bhosale**
 
-- LinkedIn: https://linkedin.com/in/your-profile
-- GitHub: https://github.com/your-username
-- Email: your-email@example.com
+- LinkedIn: https://www.linkedin.com/in/pratham-bhosale-/
+- GitHub: https://github.com/pmbhosale96k
+- Email: pmbhosale353@gmail.com
